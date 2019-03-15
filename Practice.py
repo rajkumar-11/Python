@@ -1,2 +1,3 @@
-if __name__ == '__main__':
-    N = int(input())
+x=[]
+print(x.append(3))
+print(x)
