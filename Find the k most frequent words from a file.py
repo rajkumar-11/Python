@@ -25,32 +25,40 @@ class Node:
 
 
 def insertTrieAndHeap(word, root, heap, len, index):
+    print("root= ",root)
     if root is None:
         root = Node()
 
     if (len != index):
-        # print("word[index]-97 =",ord(word[index])-97)
-        insertTrieAndHeap(word,root.child[ord(word[index])-97], heap, len, index + 1)
+        print("word[index]-97 =",ord(word[index])-97)
+        root.child[ord(word[index]) - 97]= insertTrieAndHeap(word,root.child[ord(word[index])-97], heap, len, index + 1)
     else:
+        print("here",word)
+        print("frequency =",root.frequency)
         if (root.isEnd):
             root.frequency = root.frequency + 1
         else:
             root.isEnd = True
             root.frequency = 1
-        insertInMinHeap(heap, root, word)
+        root= insertInMinHeap(heap, root, word)
+    print("indexMinHeap= ", root.indexMinHeap)
+    return root
+
 
 
 def insertInMinHeap(heap, root, word):
-    # print("indexMin= ",root.indexMinHeap)
+    print("indexMin= ",root.indexMinHeap)
     if root.indexMinHeap != -1:
         heap.array[root.indexMinHeap].frequency += 1
         minHeapify(heap, root.indexMinHeap)
     elif (heap.count < heap.capacity):
         count=heap.count
+        print("count= ", count)
         heap.array[count].frequency = root.frequency
         heap.array[count].word = word
         heap.array[count].root = root
         root.indexMinHeap = heap.count
+        # print("root.indexMinHeap",root.indexMinHeap)/
         heap.count += 1
         buildMinHeap(heap)
     elif (root.frequency > heap.array[0].frequency):
@@ -59,6 +67,7 @@ def insertInMinHeap(heap, root, word):
         heap.array[0].root.indexMinHeap = 0
         heap.array[0].frequency = root.frequency
         minHeapify(heap, 0)
+    return root
 
 
 def buildMinHeap(heap):
@@ -93,7 +102,7 @@ def printKMostFreq(file, k):
     root = None
     for line in file:
         for word in line.split():
-            insertTrieAndHeap(word, root, heap, len(word) - 1, 0)
+           root=insertTrieAndHeap(word, root, heap, len(word) , 0)
 
     displayMinHeap(heap)
 
