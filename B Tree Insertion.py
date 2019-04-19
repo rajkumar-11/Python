@@ -1,14 +1,15 @@
 class BTreeNode:
     def __init__(self, t, leaf):
-        print("here")
+        # print("here")
         self.t = t
         self.leaf = leaf
         self.keys = [0] * (2 * t - 1)
         self.C = []
         self.n = 0
+
     def createChild(self):
-        for i in range(2*self.t):
-            self.C.append(BTreeNode(self.t,self.leaf))
+        for i in range(2 * self.t):
+            self.C.append(BTreeNode(self.t, self.leaf))
 
     def splitChild(self, i, y):
         z = BTreeNode(y.t, y.leaf)
@@ -21,18 +22,18 @@ class BTreeNode:
                 z.C[j] = y.C[j + self.t]
 
         y.n = self.t - 1
-        for j in range(n, i + 1, -1):
+        for j in range(self.n, i + 1, -1):
             self.C[j + 1] = self.C[j]
         self.C[i + 1] = z
-        for j in range(n - 1, i, -1):
+        for j in range(self.n - 1, i, -1):
             self.keys[j + 1] = self.keys[j]
-        self.keys[i] = y.keys[y.t - 1]
+        self.keys[i] = y.keys[self.t - 1]
         self.n = self.n + 1
 
     def insertNonFull(self, k):
         i = self.n - 1
         print("i= ", i, " k= ", k)
-        if self.leaf == False:
+        if self.leaf == True:
             while i >= 0 and self.keys[i] > k:
                 self.keys[i + 1] = self.keys[i]
                 i = i - 1
@@ -42,15 +43,22 @@ class BTreeNode:
             while (i >= 0 and self.keys[i] > k):
                 i = i - 1
 
-
-
             if (self.C[i + 1].n == 2 * self.t - 1):
-                print("here")
-                self.C[i + 1].splitChild(i + 1, self.C[i + 1])
+                print("here x")
+                self.splitChild(i + 1, self.C[i + 1])
 
                 if (self.keys[i + 1] < k):
-                    i=i+1
+                    i = i + 1
             self.C[i + 1].insertNonFull(k)
+
+    def traverse(self):
+        for i in range(self.n):
+            if self.leaf is False:
+                self.C[i].traverse()
+            print(self.keys[i], end=" ")
+
+        if self.leaf is False:
+            self.C[i].traverse()
 
 
 class BTree:
@@ -69,7 +77,7 @@ class BTree:
             self.root.n = 1
         else:
             if (self.root.n == 2 * self.t - 1):
-                s = BTreeNode(t, False)
+                s = BTreeNode(self.t, False)
                 s.createChild()
                 s.C[0] = self.root
                 s.splitChild(0, self.root)
@@ -80,6 +88,12 @@ class BTree:
                 self.root = s
             else:
                 self.root.insertNonFull(k)
+
+    def traverse(self):
+        if self.root is None:
+            return
+        else:
+            self.root.traverse()
 
 
 if __name__ == "__main__":
@@ -92,5 +106,5 @@ if __name__ == "__main__":
     t.insert(30)
     t.insert(7)
     t.insert(17)
-    # print("Traversal of constructed tree is ")
-    # t.traverse()
+    print("Traversal of constructed tree is ")
+    t.traverse()
