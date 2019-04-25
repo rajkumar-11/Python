@@ -70,7 +70,7 @@ class RBTree:
                     self.rotateLeft(grandParent)
                     self.swap(parent, grandParent)
                     node = parent
-        root.color = Color.Black
+        self.root.color = Color.Black
 
     def swap(self, parent, grandparent):
         temp = parent.color
