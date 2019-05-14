@@ -1,1 +1,2 @@
-print(pow(2,10))
+print(3^4)
+
