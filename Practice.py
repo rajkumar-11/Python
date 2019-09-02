@@ -1,2 +1,4 @@
-x=2.9999999999999996
-print(int(x))
+
+
+if __name__=="__main__":
+print("abc")
