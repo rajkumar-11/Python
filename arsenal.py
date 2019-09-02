@@ -1,3 +1,4 @@
 
 print("hello")
-prnt("abc")
+print("abc"
+print("xyz")
